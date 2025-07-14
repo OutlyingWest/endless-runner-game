@@ -1,0 +1,46 @@
+# CMake build directories
+build/
+cmake-build-*/
+
+# CMake-generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# Ninja-generated files
+*.ninja
+.ninja_deps
+.ninja_log
+
+# Visual Studio Code / CLion
+.vscode/
+.idea/
+
+# Compiled object files and executables
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Generated test logs and data
+Testing/
+CTestTestfile.cmake
+DartConfiguration.tcl
+
+# Other temporary files
+*.log
+*.tmp
+*.swp
+*~
+
