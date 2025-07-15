@@ -2,6 +2,7 @@
 #include "physics_system.h"
 #include "render_system.h"
 #include "input_system.h"
+#include "gameplay_system.h"
 #include "entity.h"
 
 int main() {
@@ -11,18 +12,27 @@ int main() {
     PhysicsSystem physics(1000.f);
     RenderSystem renderer;
     InputSystem input;
+    GameplaySystem gameplay;
 
     // === ENTITY CREATION ===
     Entity player(
-        {50.f, 50.f},
-        {100.f, 100.f},
-        {0.f, 0.f},
-        sf::Color::Cyan,
-        true,
-        true
+        {50.f, 50.f},    // Size
+        {100.f, 500.f},  // Initial position on the ground
+        {0.f, 0.f},      // Initial velocity
+        sf::Color::Green, // Color
+        true,            // Gravity affected
+        true             // Player controlled
     );
 
-    std::vector<Entity*> entities = { &player };
+    Obstacle obstacle(
+        {50.f, 50.f},             
+        {800.f, 450.f},           
+        {-100.f, 0.f},            
+        sf::Color::Red,           
+        window.getSize().x         
+    );
+
+    std::vector<Entity*> entities = { &player, &obstacle };
 
     sf::Clock clock;
 
@@ -36,6 +46,7 @@ int main() {
         }
         input.update(entities);
         physics.update(entities, dt);
+        gameplay.update(entities);
 
         // collision with ground
         if (player.position.y + player.shape.getSize().y >= 500.f) {

@@ -17,5 +17,23 @@ public:
         bool gravity,
         bool controlled
     );
-    void updateShapePosition();
+    virtual ~Entity() = default;
+    virtual void onGameplayUpdate(); 
+    virtual void updateShapePosition();
+};
+
+
+class Obstacle : public Entity {
+public:
+    float windowWidth;
+    
+    Obstacle(
+        const sf::Vector2f& size,
+        const sf::Vector2f& pos,
+        const sf::Vector2f& vel,
+        const sf::Color& color,
+        float windowWidth
+    );
+
+    void onGameplayUpdate() override;
 };
