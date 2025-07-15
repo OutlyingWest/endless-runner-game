@@ -13,7 +13,11 @@ int main() {
 
     PhysicsSystem physics(1000.f);
     RenderSystem renderer;
-    InputSystem input;
+    InputSystem input(
+        -200.f,  // Move back speed
+        200.f,   // Move forward speed
+        -600.f   // Jump speed
+    );
     GameplaySystem gameplay;
     CollisionSystem collision;
 

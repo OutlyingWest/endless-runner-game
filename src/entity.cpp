@@ -32,7 +32,7 @@ void Entity::onGravityUpdate(float dt, float gravity) {
 void Entity::onCollision(Entity* other) {
     static int counter = 0;
     if (dynamic_cast<Obstacle*>(other)) {
-        std::cout << "Jopa! " << counter++ << " \n";
+        std::cout << "Game Over! " << counter++ << " \n";
     }
 }
 
