@@ -6,7 +6,6 @@ public:
     sf::RectangleShape shape;
     sf::Vector2f position;
     sf::Vector2f velocity;
-    bool isGravityAffected;
     bool isPlayerControlled;
 
     Entity(
@@ -14,10 +13,10 @@ public:
         const sf::Vector2f& pos,
         const sf::Vector2f& vel,
         const sf::Color& color,
-        bool gravity,
         bool controlled
     );
     virtual ~Entity() = default;
+    virtual void onCollision(Entity* other);
     virtual void onGameplayUpdate(); 
     virtual void updateShapePosition();
     virtual void onGravityUpdate(float dt, float gravity);
@@ -35,7 +34,7 @@ public:
         const sf::Color& color,
         float windowWidth
     );
-
+    
     void onGameplayUpdate() override;
     void onGravityUpdate(float dt, float gravity) override;
 };
