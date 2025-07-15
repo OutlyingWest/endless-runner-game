@@ -20,6 +20,7 @@ public:
     virtual ~Entity() = default;
     virtual void onGameplayUpdate(); 
     virtual void updateShapePosition();
+    virtual void onGravityUpdate(float dt, float gravity);
 };
 
 
@@ -36,4 +37,5 @@ public:
     );
 
     void onGameplayUpdate() override;
+    void onGravityUpdate(float dt, float gravity) override;
 };

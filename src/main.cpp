@@ -7,6 +7,7 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "ECS Template");
+    window.setPosition(sf::Vector2i(200, 150));
     window.setFramerateLimit(60);
 
     PhysicsSystem physics(1000.f);

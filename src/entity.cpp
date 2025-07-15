@@ -23,6 +23,10 @@ void Entity::updateShapePosition() {
 
 void Entity::onGameplayUpdate() {}
 
+void Entity::onGravityUpdate(float dt, float gravity) {
+    velocity.y += gravity * dt;
+}
+
 
 Obstacle::Obstacle(
     const sf::Vector2f& size,
@@ -34,11 +38,15 @@ Obstacle::Obstacle(
     Entity(size, pos, vel, color, false, false),
     windowWidth(windowWidth){}
 
-// Override the onGameplayUpdate method for Obstacle
-// to handle its specific behavior, such as resetting position when it goes off-screen
+
+// Reset position when Obstacle goes off-screen
 void Obstacle::onGameplayUpdate() {
     if (position.x + shape.getSize().x < 0) {
         position.x = windowWidth;
         updateShapePosition();
     }
+}
+
+void Obstacle::onGravityUpdate(float dt, float gravity) {
+    // Obstacles are not affected by gravity.
 }

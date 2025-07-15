@@ -4,10 +4,8 @@ PhysicsSystem::PhysicsSystem(float gravityValue) : gravity(gravityValue) {}
 
 void PhysicsSystem::update(std::vector<Entity*>& entities, float dt) {
     for (Entity* e : entities) {
-        if (e->isGravityAffected)
-            e->velocity.y += gravity * dt;
-
+        e->onGravityUpdate(dt, gravity);
         e->position += e->velocity * dt;
         e->updateShapePosition();
-    }
+    };
 }
