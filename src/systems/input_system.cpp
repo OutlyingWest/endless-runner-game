@@ -1,6 +1,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "systems/input_system.h"
 #include "components.h"
+#include <iostream>
 
 
 InputSystem::InputSystem(
@@ -10,7 +11,8 @@ InputSystem::InputSystem(
 ):
     moveLeftSpeed(left),
     moveRightSpeed(right),
-    jumpSpeed(jump) {}
+    jumpSpeed(jump),
+    doubleJumpSpeed(jump / 1.2) {}
 
 void InputSystem::update(Registry& registry) {
     for (Entity e : registry.view<PlayerControlled, Velocity>()) {
@@ -34,16 +36,18 @@ void InputSystem::jumpUpdate(Registry& registry, Entity e, Velocity& vel) {
     bool jumpPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
                        sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 
-    if (!jumpPressed)
-        return;
-
-    if (registry.hasComponent<OnGround>(e)) {
-        vel.y = jumpSpeed;
-        jumpCount = 1;
-        registry.removeComponent<OnGround>(e);
+    if (jumpPressed && !wasJumpPressed) {
+        if (registry.hasComponent<OnGround>(e)) {
+            vel.y = jumpSpeed;
+            jumpCount = 1;
+            registry.removeComponent<OnGround>(e);
+            std::cout << "Player jumped from ground!" << std::endl;
+        }
+        else if (jumpCount < 2) {
+            vel.y = doubleJumpSpeed;
+            jumpCount++;
+            std::cout << "Player jumped in air!" << std::endl;
+        }
     }
-    else if (jumpCount == 2) {
-        vel.y = jumpSpeed;
-        jumpCount++;
-    }
+    wasJumpPressed = jumpPressed;
 }
