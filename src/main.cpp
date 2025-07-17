@@ -25,6 +25,7 @@ int main() {
         
     Entity player = createPlayer(registry, 100.f, 500.f);
     Entity obstacle = createRectangleObstacle(registry, 800.f, 450.f, window.getSize().x);
+    Entity triangleObstacle = createTriangleObstacle(registry, 800.f, 450.f, window.getSize().x);
 
     // === GAME LOOP ===
     sf::Clock clock;

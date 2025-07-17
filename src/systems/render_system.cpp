@@ -6,7 +6,7 @@ void RenderSystem::update(Registry& registry, sf::RenderWindow& window) {
         auto& pos = registry.getComponent<Position>(e);
         auto& rend = registry.getComponent<Renderable>(e);
 
-        rend.shape.setPosition(pos.x, pos.y);
-        window.draw(rend.shape);
+        rend.shape->setPosition(pos.x, pos.y);
+        window.draw(*rend.shape);
     }
 }

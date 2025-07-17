@@ -4,3 +4,4 @@
 #include <SFML/Graphics.hpp>
 
 Entity createRectangleObstacle(Registry& registry, float x, float y, float windowWidth);
+Entity createTriangleObstacle(Registry& registry, float x, float y, float windowWidth);

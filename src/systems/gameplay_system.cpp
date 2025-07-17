@@ -1,8 +1,9 @@
 #include "systems/gameplay_system.h"
 #include "components.h"
+#include <iostream>
 
 void GameplaySystem::update(Registry& registry) {
-    for (Entity e : registry.view<Obstacle, Position, Velocity>()) {
+    for (Entity e : registry.view<Obstacle, Position>()) {
         auto& pos = registry.getComponent<Position>(e);
         auto& obs = registry.getComponent<Obstacle>(e);
 
@@ -10,5 +11,11 @@ void GameplaySystem::update(Registry& registry) {
         if (pos.x + 50.f < 0.f) {  
             pos.x = obs.windowWidth;
         }
+    }
+    static int cnt = 0;
+    for (Entity e : registry.view<PlayerControlled, Collided>()) {
+        auto& collided = registry.getComponent<Collided>(e);
+        std::cout << "Player collided: " << collided.entity << " ! "<< cnt++ << std::endl;
+        registry.removeComponent<Collided>(e);
     }
 }

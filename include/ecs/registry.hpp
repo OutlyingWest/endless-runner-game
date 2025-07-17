@@ -6,6 +6,10 @@
 
 using Entity = std::uint32_t;
 
+// Define a constant for the ground entity temporarily
+// This is a placeholder and should be replaced with a proper ground entity management system.
+#define GROUND_ENTITY 0
+
 class Registry {
 public:
     Entity createEntity() {
@@ -14,9 +18,9 @@ public:
         return id;
     }
 
-    template <typename T>
-    void addComponent(Entity e, const T& component) {
-        getStorage<T>()[e] = component;
+    template<typename T>
+    void addComponent(Entity e, T&& component) {
+        getStorage<std::decay_t<T>>()[e] = std::forward<T>(component);
     }
 
     template <typename T>
@@ -28,6 +32,14 @@ public:
     bool hasComponent(Entity e) const {
         const auto& storage = getStorage<T>();
         return storage.find(e) != storage.end();
+    }
+
+    template<typename T>
+    void removeComponent(Entity e) {
+        auto& storage = getStorage<T>();
+        if (storage.find(e) != storage.end()) {
+            storage.erase(e);
+        }
     }
 
     template <typename... Components>
@@ -42,7 +54,7 @@ public:
     }
 
 private:
-    Entity nextEntityId = 0;
+    Entity nextEntityId = 1;
     std::unordered_set<Entity> entities;
 
     template <typename T>
