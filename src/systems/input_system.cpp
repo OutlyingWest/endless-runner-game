@@ -16,11 +16,11 @@ void InputSystem::update(Registry& registry) {
     for (Entity e : registry.view<PlayerControlled, Velocity>()) {
         auto& vel = registry.getComponent<Velocity>(e);
         horizontalMovementUpdate(vel);
-        jumpUpdate(vel);
+        jumpUpdate(registry, e, vel);
     }
 }
 
-void InputSystem::horizontalMovementUpdate(struct Velocity& vel) {
+void InputSystem::horizontalMovementUpdate(Velocity& vel) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         vel.x = moveLeftSpeed;
     } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -30,10 +30,20 @@ void InputSystem::horizontalMovementUpdate(struct Velocity& vel) {
     }
 }
 
-void InputSystem::jumpUpdate(struct Velocity& vel) {
-    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-            sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) &&
-        vel.y == 0.f) {
+void InputSystem::jumpUpdate(Registry& registry, Entity e, Velocity& vel) {
+    bool jumpPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+                       sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+
+    if (!jumpPressed)
+        return;
+
+    if (registry.hasComponent<OnGround>(e)) {
         vel.y = jumpSpeed;
+        jumpCount = 1;
+        registry.removeComponent<OnGround>(e);
+    }
+    else if (jumpCount == 2) {
+        vel.y = jumpSpeed;
+        jumpCount++;
     }
 }

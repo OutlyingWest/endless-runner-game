@@ -15,7 +15,7 @@ void GameplaySystem::update(Registry& registry) {
     static int cnt = 0;
     for (Entity e : registry.view<PlayerControlled, Collided>()) {
         auto& collided = registry.getComponent<Collided>(e);
-        std::cout << "Player collided: " << collided.entity << " ! "<< cnt++ << std::endl;
+        std::cout << "Player collided: " << collided.other << "! "<< cnt++ << std::endl;
         registry.removeComponent<Collided>(e);
     }
 }

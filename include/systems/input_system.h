@@ -11,6 +11,7 @@ private:
     float moveLeftSpeed;
     float moveRightSpeed;
     float jumpSpeed;
+    int jumpCount = 0;
     void horizontalMovementUpdate(struct Velocity& vel);
-    void jumpUpdate(struct Velocity& vel);
+    void jumpUpdate(Registry& registry, Entity e, Velocity& vel);
 };

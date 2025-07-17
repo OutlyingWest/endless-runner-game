@@ -54,7 +54,7 @@ public:
     }
 
 private:
-    Entity nextEntityId = 1;
+    Entity nextEntityId = 0;
     std::unordered_set<Entity> entities;
 
     template <typename T>

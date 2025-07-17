@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
 
 
 CollisionSystem::CollisionSystem(float groundY) : groundY(groundY) {}
@@ -10,8 +11,6 @@ CollisionSystem::CollisionSystem(float groundY) : groundY(groundY) {}
 void CollisionSystem::update(Registry& registry) {
     for (Entity e : registry.view<Position, Collidable>()) {
         entityToOthersCollisionUpdate(registry, e);
-        groundCollisionUpdate(registry, e);
-
     }
 }
 
@@ -35,22 +34,32 @@ void CollisionSystem::entityToOthersCollisionUpdate(Registry& registry, Entity a
             if (!registry.hasComponent<Collided>(a)) {
                 registry.addComponent(a, Collided{b});
             }
+            groundCollisionUpdate(registry, a, b, positionA, positionB);
         }
     }
 }
 
-void CollisionSystem::groundCollisionUpdate(Registry& registry, Entity e) {
-    auto& position = registry.getComponent<Position>(e);
-    auto& velocity = registry.getComponent<Velocity>(e);
-    auto& renderable = registry.getComponent<Renderable>(e);
+void CollisionSystem::groundCollisionUpdate(
+    Registry& registry,
+    Entity a,
+    Entity b,
+    Position& positionA,
+    Position& positionB
+) {
+    if (registry.hasComponent<Ground>(b)) {
+        // std::cout << "Player landed on ground at y=" << positionA.y << std::endl;
+        auto& velocityA = registry.getComponent<Velocity>(a);
+        auto& renderableA = registry.getComponent<Renderable>(a);
+        const Position& positionGround = positionB;
 
-    float height = renderable.shape->getGlobalBounds().height;
-
-    if (position.y + height >= groundY) {
-        position.y = groundY - height; // Reset position to ground level
-        velocity.y = 0.f; // Reset vertical velocity
-        if (!registry.hasComponent<Collided>(e)) {
-            registry.addComponent(e, Collided{GROUND_ENTITY});
+        float heightA = renderableA.shape->getGlobalBounds().height;
+        if (!registry.hasComponent<OnGround>(a)) {
+            registry.addComponent(a, OnGround{});
+        }
+        // Set position above the ground
+        if (velocityA.y > 0) {
+            velocityA.y = 0;
+            positionA.y = positionGround.y - heightA; // Adjust position to be above the ground
         }
     }
 }

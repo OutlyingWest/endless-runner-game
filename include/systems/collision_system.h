@@ -10,7 +10,13 @@ public:
 private:
     float groundY;
     void entityToOthersCollisionUpdate(Registry& registry, Entity a);
-    void groundCollisionUpdate(Registry& registry, Entity e);
+    void groundCollisionUpdate(
+        Registry& registry,
+        Entity a,
+        Entity b,
+        Position& positionA,
+        Position& positionB
+    );
     inline std::vector<sf::Vector2f> getPoints(
         const ColliderVariant& col,
         const sf::Vector2f& pos

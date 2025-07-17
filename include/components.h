@@ -14,8 +14,14 @@ struct PlayerControlled {};
 
 struct GravityAffected {};
 
+struct Enemy {};
+
+struct Ground {};
+
+struct OnGround {};
+
 struct Collided {
-    Entity entity;
+    Entity other;
 };
 
 struct Renderable {
