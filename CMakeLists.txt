@@ -7,8 +7,11 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
 include_directories(include)
 
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE SYSTEMS_SRC src/systems/*.cpp)
 
-add_executable(simple_game ${SOURCES})
+add_executable(simple_game
+    src/main.cpp
+    ${SYSTEMS_SRC}
+)
 
 target_link_libraries(simple_game sfml-graphics sfml-window sfml-system)
