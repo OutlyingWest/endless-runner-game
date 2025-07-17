@@ -1,11 +1,13 @@
-#include <SFML/Graphics.hpp>
 #include "ecs/registry.hpp"
 #include "systems/physics_system.h"
 #include "systems/render_system.h"
 #include "systems/input_system.h"
 #include "systems/gameplay_system.h"
 #include "systems/collision_system.h"
+#include "entities/player.h"
+#include "entities/obstacles.h"
 #include "components.h"
+#include <SFML/Graphics.hpp>
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "ECS SFML");
@@ -20,26 +22,9 @@ int main() {
     GameplaySystem gameplay;
     CollisionSystem collision(500.f);
 
-    // === PLAYER ENTITY ===
-    Entity player = registry.createEntity();
-    registry.addComponent(player, Position{100.f, 500.f});
-    registry.addComponent(player, Velocity{0.f, 0.f});
-    registry.addComponent(player, GravityAffected{});
-    registry.addComponent(player, PlayerControlled{});
-
-    sf::RectangleShape playerShape({50.f, 50.f});
-    playerShape.setFillColor(sf::Color::Green);
-    registry.addComponent(player, Renderable{playerShape});
-
-    // === OBSTACLE ENTITY ===
-    Entity obstacle = registry.createEntity();
-    registry.addComponent(obstacle, Position{800.f, 450.f});
-    registry.addComponent(obstacle, Velocity{-100.f, 0.f});
-    registry.addComponent(obstacle, Obstacle{800.f});
-
-    sf::RectangleShape obstacleShape({50.f, 50.f});
-    obstacleShape.setFillColor(sf::Color::Red);
-    registry.addComponent(obstacle, Renderable{obstacleShape});
+        
+    Entity player = createPlayer(registry, 100.f, 500.f);
+    Entity obstacle = createRectangleObstacle(registry, 800.f, 450.f, window.getSize().x);
 
     // === GAME LOOP ===
     sf::Clock clock;
