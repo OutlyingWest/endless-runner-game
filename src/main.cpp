@@ -16,14 +16,17 @@ int main() {
     window.setFramerateLimit(60);
 
     Registry registry;
+    CollisionEventDispatcher dispatcher;
 
     // === SYSTEMS ===
     PhysicsSystem physics(1000.f);
     InputSystem input(-200.f, 200.f, -600.f);
     RenderSystem render;
     GameplaySystem gameplay;
-    CollisionSystem collision;
+    CollisionSystem collision(dispatcher);
 
+    // Subscribe systems to collision events
+    dispatcher.subscribe(&gameplay);
         
     Entity player = createPlayer(registry, 100.f, 500.f);
     Entity rectangleObstacle = createRectangleObstacle(

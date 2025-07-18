@@ -1,12 +1,16 @@
 #pragma once
 #include "ecs/registry.hpp"
 #include "components.h"
+#include "dispatchers/collision_event_dispatcher.h"
 
 class CollisionSystem {
 public:
+    CollisionSystem(CollisionEventDispatcher& dispatcher);
     void update(Registry& registry);
 
 private:
+    CollisionEventDispatcher& collisionDispatcher;
+
     bool checkCollisionBetween(Registry& registry, Entity a, Entity b);
     void groundCollisionUpdate(
         Registry& registry,

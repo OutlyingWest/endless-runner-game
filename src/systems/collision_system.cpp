@@ -5,14 +5,17 @@
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 
+CollisionSystem::CollisionSystem(
+    CollisionEventDispatcher& dispatcher
+): 
+    collisionDispatcher(dispatcher) {}
+
 void CollisionSystem::update(Registry& registry) {
     for (Entity a : registry.view<Position, Collidable>()) {
         for (Entity b : registry.view<Position, Collidable>()) {
             if (a == b) continue;
             if (checkCollisionBetween(registry, a, b)) {
-                if (!registry.hasComponent<Collided>(a)) {
-                    registry.addComponent(a, Collided{b});
-                }
+                collisionDispatcher.notify(CollisionEvent{a, b});
                 groundCollisionUpdate(registry, a, b);
             }
         }

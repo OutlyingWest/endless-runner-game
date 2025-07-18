@@ -3,6 +3,9 @@
 #include <iostream>
 
 void GameplaySystem::update(Registry& registry) {
+    // Update the internal registry pointer to use it in onCollision callback
+    registryPtr = &registry; 
+
     for (Entity e : registry.view<Obstacle, Position>()) {
         auto& pos = registry.getComponent<Position>(e);
         auto& obs = registry.getComponent<Obstacle>(e);
@@ -17,5 +20,13 @@ void GameplaySystem::update(Registry& registry) {
         auto& collided = registry.getComponent<Collided>(e);
         std::cout << "Player collided: " << collided.other << "! "<< cnt++ << std::endl;
         registry.removeComponent<Collided>(e);
+    }
+}
+
+void GameplaySystem::onCollision(const CollisionEvent& event) {
+    if (!registryPtr) return;
+
+    if (registryPtr->hasComponent<PlayerControlled>(event.entityA)) {
+        std::cout << "Player collided with: " << event.entityB << std::endl;
     }
 }
