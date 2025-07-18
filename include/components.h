@@ -27,10 +27,6 @@ struct Obstacle {
 };
 
 // == Collisions ==
-struct Collided {
-    Entity other;
-};
-
 // --- Collider types ---
 struct RectangleCollider {
     float width, height;
@@ -42,6 +38,7 @@ struct TriangleCollider {
 
 using ColliderVariant = std::variant<RectangleCollider, TriangleCollider>;
 
+// --- Collision components ---
 struct Collidable {
     ColliderVariant collider;
 };

@@ -8,4 +8,7 @@ public:
 
 private:
     float gravity;
+
+    void applyGravity(Registry& registry, Entity e, float dt);
+    void applyShaking(Registry& registry, Entity e, float dt);
 };

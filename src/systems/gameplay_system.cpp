@@ -15,12 +15,6 @@ void GameplaySystem::update(Registry& registry) {
             pos.x = obs.windowWidth;
         }
     }
-    static int cnt = 0;
-    for (Entity e : registry.view<PlayerControlled, Collided>()) {
-        auto& collided = registry.getComponent<Collided>(e);
-        std::cout << "Player collided: " << collided.other << "! "<< cnt++ << std::endl;
-        registry.removeComponent<Collided>(e);
-    }
 }
 
 void GameplaySystem::onCollision(const CollisionEvent& event) {
