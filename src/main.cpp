@@ -4,6 +4,7 @@
 #include "systems/input_system.h"
 #include "systems/gameplay_system.h"
 #include "systems/collision_system.h"
+#include "systems/hud_system.h"
 #include "entities/player.h"
 #include "entities/obstacles.h"
 #include "components.h"
@@ -24,6 +25,7 @@ int main() {
     RenderSystem render;
     GameplaySystem gameplay;
     CollisionSystem collision(dispatcher);
+    HudSystem hud;
 
     // Subscribe systems to collision events
     dispatcher.subscribe(&gameplay);
@@ -69,6 +71,7 @@ int main() {
 
         window.clear();
         render.update(registry, window);
+        hud.update(registry, window);
         window.display();
     }
 
