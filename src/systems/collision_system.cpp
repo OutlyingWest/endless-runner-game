@@ -5,48 +5,51 @@
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 
-
-CollisionSystem::CollisionSystem(float groundY) : groundY(groundY) {}
-
 void CollisionSystem::update(Registry& registry) {
-    for (Entity e : registry.view<Position, Collidable>()) {
-        entityToOthersCollisionUpdate(registry, e);
+    for (Entity a : registry.view<Position, Collidable>()) {
+        for (Entity b : registry.view<Position, Collidable>()) {
+            if (a == b) continue;
+            if (checkCollisionBetween(registry, a, b)) {
+                if (!registry.hasComponent<Collided>(a)) {
+                    registry.addComponent(a, Collided{b});
+                }
+                groundCollisionUpdate(registry, a, b);
+            }
+        }
     }
 }
 
-void CollisionSystem::entityToOthersCollisionUpdate(Registry& registry, Entity a) {
+// Check if two entities collide based on their colliders
+bool CollisionSystem::checkCollisionBetween(Registry& registry, Entity a, Entity b) {
     auto& positionA = registry.getComponent<Position>(a);
     auto& collidableA = registry.getComponent<Collidable>(a);
 
     sf::Vector2f positionA2f(positionA.x, positionA.y);
     auto polygonA = getPoints(collidableA.collider, positionA2f);
 
-    for (Entity b : registry.view<Position, Collidable>()) {
-        if (a == b) continue;
+    auto& positionB = registry.getComponent<Position>(b);
+    auto& collidableB = registry.getComponent<Collidable>(b);
 
-        auto& positionB = registry.getComponent<Position>(b);
-        auto& collidableB = registry.getComponent<Collidable>(b);
+    sf::Vector2f positionB2f(positionB.x, positionB.y);
+    auto polygonB = getPoints(collidableB.collider, positionB2f);
 
-        sf::Vector2f positionB2f(positionB.x, positionB.y);
-        auto polygonB = getPoints(collidableB.collider, positionB2f);
-
-        if (polygonsIntersect(polygonA, polygonB)) {
-            if (!registry.hasComponent<Collided>(a)) {
-                registry.addComponent(a, Collided{b});
-            }
-            groundCollisionUpdate(registry, a, b, positionA, positionB);
-        }
+    if (polygonsIntersect(polygonA, polygonB)) {
+        return true;
     }
+    return false;
 }
 
+// Handle ground collision updates
+// This function checks if the entity is colliding with the ground and updates its position accordingly
 void CollisionSystem::groundCollisionUpdate(
     Registry& registry,
     Entity a,
-    Entity b,
-    Position& positionA,
-    Position& positionB
+    Entity b
 ) {
     if (registry.hasComponent<Ground>(b)) {
+        auto& positionA = registry.getComponent<Position>(a);
+        auto& positionB = registry.getComponent<Position>(b);
+
         // std::cout << "Player landed on ground at y=" << positionA.y << std::endl;
         auto& velocityA = registry.getComponent<Velocity>(a);
         auto& renderableA = registry.getComponent<Renderable>(a);
@@ -64,6 +67,9 @@ void CollisionSystem::groundCollisionUpdate(
     }
 }
 
+
+// Get points of the collider based on its type and position
+// This function returns a vector of points representing the collider's shape in world coordinates
 inline std::vector<sf::Vector2f> CollisionSystem::getPoints(
     const ColliderVariant& col,
     const sf::Vector2f& pos

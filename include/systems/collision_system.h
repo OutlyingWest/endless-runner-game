@@ -4,18 +4,14 @@
 
 class CollisionSystem {
 public:
-    CollisionSystem(float groundY);
     void update(Registry& registry);
 
 private:
-    float groundY;
-    void entityToOthersCollisionUpdate(Registry& registry, Entity a);
+    bool checkCollisionBetween(Registry& registry, Entity a, Entity b);
     void groundCollisionUpdate(
         Registry& registry,
         Entity a,
-        Entity b,
-        Position& positionA,
-        Position& positionB
+        Entity b
     );
     inline std::vector<sf::Vector2f> getPoints(
         const ColliderVariant& col,

@@ -22,7 +22,7 @@ int main() {
     InputSystem input(-200.f, 200.f, -600.f);
     RenderSystem render;
     GameplaySystem gameplay;
-    CollisionSystem collision(500.f);
+    CollisionSystem collision;
 
         
     Entity player = createPlayer(registry, 100.f, 500.f);
