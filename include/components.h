@@ -26,6 +26,20 @@ struct Obstacle {
     float windowWidth;
 };
 
+struct Health {
+    int current;
+    int max;
+};
+
+struct Damage {
+    int amount;
+};
+
+struct Invincible {
+    float duration; 
+    float elapsed;
+};
+
 // == Collisions ==
 // --- Collider types ---
 struct RectangleCollider {

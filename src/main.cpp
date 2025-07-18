@@ -65,7 +65,7 @@ int main() {
         input.update(registry);
         physics.update(registry, dt);
         collision.update(registry);
-        gameplay.update(registry);
+        gameplay.update(registry, dt);
 
         window.clear();
         render.update(registry, window);
