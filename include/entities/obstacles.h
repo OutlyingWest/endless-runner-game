@@ -18,4 +18,4 @@ Entity createRectangleObstacle(
     float height, 
     float windowWidth
 );
-Entity createTriangleObstacle(Registry& registry, float x, float y, float windowWidth);
+Entity createTriangleObstacle(Registry& registry, float x, float y, float windowWidth, float base, float height);

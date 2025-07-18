@@ -4,6 +4,7 @@
 #include "systems/input_system.h"
 #include "systems/gameplay_system.h"
 #include "systems/collision_system.h"
+#include "systems/spawn_system.h"
 #include "systems/hud_system.h"
 #include "entities/player.h"
 #include "entities/obstacles.h"
@@ -25,12 +26,16 @@ int main() {
     RenderSystem render;
     GameplaySystem gameplay;
     CollisionSystem collision(dispatcher);
+    SpawnSystem spawner(window.getSize().x, window.getSize().y, 500.f);
     HudSystem hud;
 
     // Subscribe systems to collision events
     dispatcher.subscribe(&gameplay);
+    
+    // Temporary: pass window to gestroy when Game is over
+    gameplay.setWindow(&window);
         
-    Entity player = createPlayer(registry, 100.f, 500.f);
+    Entity player = createPlayer(registry, 100.f, 300.f);
     Entity rectangleObstacle = createRectangleObstacle(
         registry, 
         800.f, 
@@ -39,7 +44,14 @@ int main() {
         50.f, 
         window.getSize().x
     );
-    Entity triangleObstacle = createTriangleObstacle(registry, 800.f, 450.f, window.getSize().x);
+    Entity triangleObstacle = createTriangleObstacle(
+        registry, 
+        800.f, 
+        450.f, 
+        window.getSize().x, 
+        50.f, 
+        50.f
+    );
     Entity ground = createGround(
         registry, 
         0.f, 
@@ -65,6 +77,7 @@ int main() {
         }
 
         input.update(registry);
+        spawner.update(registry, dt);
         physics.update(registry, dt);
         collision.update(registry);
         gameplay.update(registry, dt);

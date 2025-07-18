@@ -60,6 +60,12 @@ void GameplaySystem::applyPlayerDamageOnCollision(const CollisionEvent& event) {
         registryPtr->addComponent(player, Invincible{1.0f, 0.f});
 
         std::cout << "Player took " << dmg << " damage! " << "hp: " << hp.current << '\n';
+
+        // Temporary Game Over logic
+        if (hp.current <= 0) {
+            std::cout << "Game Over!" << std::endl;
+            window->close(); 
+        }
     }
 }
 

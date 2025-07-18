@@ -43,7 +43,7 @@ Entity createRectangleObstacle(
     return e;
 }
 
-Entity createTriangleObstacle(Registry& registry, float x, float y, float windowWidth) {
+Entity createTriangleObstacle(Registry& registry, float x, float y, float windowWidth, float base, float height) {
     Entity e = registry.createEntity();
 
     registry.addComponent(e, Position{x, y});
@@ -53,10 +53,6 @@ Entity createTriangleObstacle(Registry& registry, float x, float y, float window
 
     
     // Create a triangle shape
-    // The triangle will be an isosceles triangle
-    const float base = 50.f;
-    const float height = 50.f;
-
     auto triangle = std::make_unique<sf::ConvexShape>();
     triangle->setPointCount(3);
     triangle->setPoint(0, {0.f, base});
