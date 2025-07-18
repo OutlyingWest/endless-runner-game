@@ -2,6 +2,7 @@
 #include <variant>
 #include <SFML/Graphics.hpp>
 
+// == Physics ==
 struct Position {
     float x, y;
 };
@@ -10,33 +11,24 @@ struct Velocity {
     float x, y;
 };
 
-struct PlayerControlled {};
+struct OnGround {};
 
 struct GravityAffected {};
+
+// == Gameplay ==
+struct PlayerControlled {};
 
 struct Enemy {};
 
 struct Ground {};
 
-struct OnGround {};
-
-struct Collided {
-    Entity other;
-};
-
-struct Renderable {
-    std::unique_ptr<sf::Shape> shape;
-
-    Renderable() = default;
-    Renderable(std::unique_ptr<sf::Shape> s) : shape(std::move(s)) {}
-    Renderable(Renderable&&) noexcept = default;
-    Renderable& operator=(Renderable&&) noexcept = default;
-    Renderable(const Renderable&) = delete;
-    Renderable& operator=(const Renderable&) = delete;
-};
-
 struct Obstacle {
     float windowWidth;
+};
+
+// == Collisions ==
+struct Collided {
+    Entity other;
 };
 
 // --- Collider types ---
@@ -52,4 +44,23 @@ using ColliderVariant = std::variant<RectangleCollider, TriangleCollider>;
 
 struct Collidable {
     ColliderVariant collider;
+};
+
+// == Rendering ==
+struct Renderable {
+    std::unique_ptr<sf::Shape> shape;
+
+    Renderable() = default;
+    Renderable(std::unique_ptr<sf::Shape> s) : shape(std::move(s)) {}
+    Renderable(Renderable&&) noexcept = default;
+    Renderable& operator=(Renderable&&) noexcept = default;
+    Renderable(const Renderable&) = delete;
+    Renderable& operator=(const Renderable&) = delete;
+};
+
+// == Effects ==
+struct Shaking {
+    float duration;      // how long to shake
+    float elapsed;       // how much time has passed
+    float magnitude;     // how intense the shaking is
 };
