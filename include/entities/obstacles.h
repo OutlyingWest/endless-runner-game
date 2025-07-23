@@ -3,6 +3,8 @@
 #include "components.h"
 #include <SFML/Graphics.hpp>
 
+using ObstacleComponents = std::tuple<Position, Velocity, Obstacle, Damage, Renderable, Collidable>;
+
 Entity createGround(
     Registry& registry,
      float x, 

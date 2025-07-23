@@ -3,12 +3,9 @@
 #include <unordered_set>
 #include <vector>
 #include <cstdint>
+#include "components.h"
 
 using Entity = std::uint32_t;
-
-// Define a constant for the ground entity temporarily
-// This is a placeholder and should be replaced with a proper ground entity management system.
-#define GROUND_ENTITY 0
 
 class Registry {
 public:
@@ -34,14 +31,6 @@ public:
         return storage.find(e) != storage.end();
     }
 
-    template<typename T>
-    void removeComponent(Entity e) {
-        auto& storage = getStorage<T>();
-        if (storage.find(e) != storage.end()) {
-            storage.erase(e);
-        }
-    }
-
     template <typename... Components>
     std::vector<Entity> view() const {
         std::vector<Entity> result;
@@ -53,6 +42,19 @@ public:
         return result;
     }
 
+    template<typename T>
+    void removeComponent(Entity e) {
+        auto& storage = getStorage<T>();
+        if (storage.find(e) != storage.end()) {
+            storage.erase(e);
+        }
+    }
+
+    template<typename Tuple>
+    void destroyEntity(Entity e) {
+        destroyEntityFromTuple<Tuple>(e, std::make_index_sequence<std::tuple_size_v<Tuple>>{});
+    }
+
 private:
     Entity nextEntityId = 0;
     std::unordered_set<Entity> entities;
@@ -61,5 +63,10 @@ private:
     static std::unordered_map<Entity, T>& getStorage() {
         static std::unordered_map<Entity, T> storage;
         return storage;
+    }
+
+    template<typename Tuple, std::size_t... I>
+    void destroyEntityFromTuple(Entity e, std::index_sequence<I...>) {
+        destroyEntity<std::tuple_element_t<I, Tuple>...>(e);
     }
 };
